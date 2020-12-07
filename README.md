@@ -1,8 +1,8 @@
-# BTC Ticker
+# Bitcoin (& other tokens) ePaper Ticker 
 
-A Python3 ePaper Bitcoin (BTC) price ticker that runs on a Raspberry Pi connected to a [Waveshare 2.7 inch monochrome ePaper display](https://www.waveshare.com/wiki/2.7inch_e-Paper_HAT). The script periodically takes data from coinapi.io and prints a summary to the ePaper.
+A Python3 ePaper Cryptocurrency price ticker that runs on a Raspberry Pi connected to a [Waveshare 2.7 inch monochrome ePaper display](https://www.waveshare.com/wiki/2.7inch_e-Paper_HAT). The script periodically takes data from CoinGecko and prints a summary to the ePaper.
 
-A few minutes work gives you a desk ornament that will tastefully monitor BTC's journey moonward.
+A few minutes work gives you a desk ornament that will tastefully monitor Bitcoin's journey moonward.
 
 ![Action Shot](/images/actionshot/BasicLunar.jpg)
 
@@ -57,9 +57,17 @@ Detatch from the screen session using CTRL-A followed by CTRL-D
 
 The ticker will now pull data every 10 minutes and update the display. 
 
-# Settings
+# Interface
 
-Screen orientation and screen inversion can be toggled using the on-screen keys. Update frequency can be changed in the config.yaml file (default is 600 seconds).
+The ePaper is slow. There is a lag of a few seconds between button press and a change to the display. 
+
+Here's what the buttons do:
+- Button 1: Toggle to next currency listed in config.yaml
+- Button 2: Rotate Display -90 degrees
+- Button 3: Invert Display
+- Button 4: Hide Display. Replace with 1 coin = 1 coin message
+
+Update frequency can be changed in the config.yaml file (default is 600 seconds).
 
 # Contributing
 
