@@ -2,6 +2,6 @@ display:
   inverted: false
   orientation: 90
 ticker:
-  currency: litecoin,bitcoin,ethereum
+  currency: small-love-potion,bitcoin,ethereum
   hidden: false
   updatefrequency: 600
