@@ -69,6 +69,14 @@ Here's what the buttons do:
 
 Update frequency can be changed in the config.yaml file (default is 600 seconds).
 
+Fork original CODE by "llvllch/btcticker" and customize your coins!
+or
+Fork my changes and just replace the Axie Graphic for your own.
+
+Update Coins name by changing one of the existing coins to your desired coin in the config.yaml file. Example and quirk: Small love potion should be written as small-love-potion (no spaces).
+
+Update Graphic (axie) of your custom Coin. Click Image directory, Click Currency directory, delete current small-love-potion graphic and upload 100x100bmp file of your own Axie (rename to small-love-potion) or the official SLP graphic.
+
 # Contributing
 
 To contribute, please fork the repository and use a feature branch. Pull requests are welcome.
