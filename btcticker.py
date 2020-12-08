@@ -14,7 +14,7 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
-import yaml 
+import yaml
 import socket
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
 fontdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fonts')
@@ -44,7 +44,7 @@ def getData(whichcoin):
 	The function to update the ePaper display. There are two versions of the layout. One for portrait aspect ratio, one for landscape.
 	"""
 	# Get the week window in msec from epoch. This is used in the api calls
-	logging.info("Getting Data")   
+	logging.info("Getting Data")
 	now_msec_from_epoch = int(round(time.time() * 1000))
 	days_ago = 7
 	endtime = now_msec_from_epoch
@@ -52,24 +52,24 @@ def getData(whichcoin):
 	starttimeseconds = round(starttime/1000)  #CoinGecko Uses seconds
 	endtimeseconds = round(endtime/1000)      #CoinGecko Uses seconds
 
-	# Get the live price 
+	# Get the live price
 	try:
 		geckourl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids="+whichcoin
 		logging.info(geckourl)
 		rawlivecoin = requests.get(geckourl).json()
-		liveprice= rawlivecoin[0]   
+		liveprice= rawlivecoin[0]
 		pricenow= float(liveprice['current_price'])
 		logging.info("Got Live Data From CoinGecko")
 	except urllib.error.URLError:
 		coinapiurl= "https://api.coincap.io/v2/assets/"+whichcoin+"/"
 		rawlivecoin = requests.get(coinapiurl).json()
-		liveprice= rawlivecoin['data']   
+		liveprice= rawlivecoin['data']
 		pricenow = float(liveprice['priceUsd'])
 		logging.info("Got Live Data From CoinApi")
-	
+
 	# Get the time series
 	try:
-		#Coingecko as first choice 
+		#Coingecko as first choice
 		#example call https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=usd&from=1592577232&to=1622577232
 
 		geckourlhistorical = "https://api.coingecko.com/api/v3/coins/"+whichcoin+"/market_chart/range?vs_currency=usd&from="+str(starttimeseconds)+"&to="+str(endtimeseconds)
@@ -97,7 +97,7 @@ def getData(whichcoin):
 			timeseriesstack.append(float (timeseriesarray[i]['priceUsd']))
 			i+=1
 
-	
+
 
 	# Add live price to timeseriesstack
 	timeseriesstack.append(pricenow)
@@ -105,7 +105,7 @@ def getData(whichcoin):
 
 def makeSpark(pricestack):
 
-	# Subtract the mean from the sparkline to make the mean appear on the plot (it's really the x axis)    
+	# Subtract the mean from the sparkline to make the mean appear on the plot (it's really the x axis)
 	x = pricestack-np.mean(pricestack)
 
 	fig, ax = plt.subplots(1,1,figsize=(10,3))
@@ -123,12 +123,12 @@ def makeSpark(pricestack):
 	plt.savefig(os.path.join(picdir,'spark.png'), dpi=17)
 	imgspk = Image.open(os.path.join(picdir,'spark.png'))
 	file_out = os.path.join(picdir,'spark.bmp')
-	imgspk.save(file_out) 
+	imgspk.save(file_out)
 
 
 def updateDisplay(config,pricestack,whichcoin):
 
-  
+
 
 	pricenow = pricestack[-1]
 	currencythumbnail= 'currency/'+whichcoin+'.bmp'
@@ -139,10 +139,10 @@ def updateDisplay(config,pricestack,whichcoin):
 			epd = epd2in7.EPD()
 			epd.Init_4Gray()
 			image = Image.new('L', (epd.width, epd.height), 255)    # 255: clear the image with white
-			image.paste(tokenimage, (10,20)) 
+			image.paste(tokenimage, (10,20))
 			draw = ImageDraw.Draw(image)
-			draw.text((5,200),"1 "+ whichcoin,font =fonthiddenprice ,fill = 0)             
-			draw.text((0,10),str(time.strftime("%c")),font =font_date,fill = 0)
+			draw.text((5,200),"1 "+ whichcoin,font =fonthiddenprice ,fill = 0)
+			draw.text((0,10),str(time.strftime("%a %b %d %Y %H:%M:%S")),font =font_date,fill = 0)
 			if config['display']['orientation'] == 180 :
 				image=image.rotate(180, expand=True)
 
@@ -154,7 +154,7 @@ def updateDisplay(config,pricestack,whichcoin):
 			image.paste(tokenimage, (0,0))
 			draw = ImageDraw.Draw(image)
 			draw.text((20,120),"1 "+ whichcoin,font =fontHorizontal,fill = 0)
-			draw.text((85,5),str(time.strftime("%c")),font =font_date,fill = 0)
+			draw.text((85,5),str(time.strftime("%a %b %d %Y %H:%M:%S")),font =font_date,fill = 0)
 			if config['display']['orientation'] == 270 :
 				image=image.rotate(180, expand=True)
 	#       This is a hack to deal with the mirroring that goes on in 4Gray Horizontal
@@ -171,12 +171,12 @@ def updateDisplay(config,pricestack,whichcoin):
 			epd = epd2in7.EPD()
 			epd.Init_4Gray()
 			image = Image.new('L', (epd.width, epd.height), 255)    # 255: clear the image with white
-			draw = ImageDraw.Draw(image)              
+			draw = ImageDraw.Draw(image)
 			draw.text((110,80),"7day :",font =font_date,fill = 0)
 			draw.text((110,95),pricechange,font =font_date,fill = 0)
 			# Print price to 5 significant figures
 			draw.text((5,200),"$"+pricenowstring,font =font,fill = 0)
-			draw.text((0,10),str(time.strftime("%c")),font =font_date,fill = 0)
+			draw.text((0,10),str(time.strftime("%a %b %d %Y %H:%M:%S")),font =font_date,fill = 0)
 			image.paste(tokenimage, (10,25))
 			image.paste(sparkbitmap,(10,125))
 			if config['display']['orientation'] == 180 :
@@ -187,22 +187,22 @@ def updateDisplay(config,pricestack,whichcoin):
 			epd = epd2in7.EPD()
 			epd.Init_4Gray()
 			image = Image.new('L', (epd.height, epd.width), 255)    # 255: clear the image with white
-			draw = ImageDraw.Draw(image)   
+			draw = ImageDraw.Draw(image)
 			draw.text((100,100),"7day : "+pricechange,font =font_date,fill = 0)
 			# Print price to 5 significant figures
 			draw.text((20,120),"$"+pricenowstring,font =fontHorizontal,fill = 0)
 			image.paste(sparkbitmap,(80,50))
 			image.paste(tokenimage, (0,0))
-			draw.text((85,5),str(time.strftime("%c")),font =font_date,fill = 0)
+			draw.text((85,5),str(time.strftime("%a %b %d %Y %H:%M:%S")),font =font_date,fill = 0)
 			if config['display']['orientation'] == 270 :
 				image=image.rotate(180, expand=True)
 	#       This is a hack to deal with the mirroring that goes on in 4Gray Horizontal
 			image = ImageOps.mirror(image)
 
-#   If the display is inverted, invert the image usinng ImageOps        
+#   If the display is inverted, invert the image usinng ImageOps
 	if config['display']['inverted'] == True:
 		image = ImageOps.invert(image)
-#   Send the image to the screen        
+#   Send the image to the screen
 	epd.display_4Gray(epd.getbuffer_4Gray(image))
 	epd.sleep()
 
@@ -223,7 +223,7 @@ def main():
 		currencystring = config['ticker']['currency']
 		crypto_list = currencystring.split(",")
 		crypto_list = [x.strip(' ') for x in crypto_list]
-		logging.info(crypto_list) 
+		logging.info(crypto_list)
 
 		coinnumber = 0
 		CURRENCY=crypto_list[coinnumber]
@@ -240,10 +240,10 @@ def main():
 
 
 #       Note that there has been no data pull yet
-		datapulled=False 
+		datapulled=False
 #       Time of start
 		lastcoinfetch = time.time()
-	 
+
 		while True:
 			key1state = GPIO.input(key1)
 			key2state = GPIO.input(key2)
@@ -263,7 +263,7 @@ def main():
 					logging.info(CURRENCY)
 					# get data
 					pricestack=getData(CURRENCY)
-					# save time of last data update 
+					# save time of last data update
 					lastcoinfetch = time.time()
 					# generate sparkline
 					makeSpark(pricestack)
@@ -284,12 +284,12 @@ def main():
 					if config['display']['inverted'] == True:
 					   config['display']['inverted'] = False
 					else:
-					   config['display']['inverted'] = True 
+					   config['display']['inverted'] = True
 					# update display
 					updateDisplay(config, pricestack, CURRENCY)
 					with open(configfile, 'w') as f:
 					   data = yaml.dump(config, f)
-					lastcoinfetch=time.time() 
+					lastcoinfetch=time.time()
 #					time.sleep(0.2)
 				if key4state == False:
 					logging.info('Hide')
@@ -302,7 +302,7 @@ def main():
 				if (time.time() - lastcoinfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
 					# get data
 					pricestack=getData(CURRENCY)
-					# save time of last data update 
+					# save time of last data update
 					lastcoinfetch = time.time()
 					# generate sparkline
 					makeSpark(pricestack)
@@ -315,8 +315,8 @@ def main():
 
 	except IOError as e:
 		logging.info(e)
-	
-	except KeyboardInterrupt:    
+
+	except KeyboardInterrupt:
 		logging.info("ctrl + c:")
 		epd2in7.epdconfig.module_exit()
 		exit()
