@@ -22,7 +22,7 @@ configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.ya
 fonthiddenprice = ImageFont.truetype(os.path.join(fontdir,'googlefonts/Roboto-Medium.ttf'), 30)
 font = ImageFont.truetype(os.path.join(fontdir,'googlefonts/Roboto-Medium.ttf'), 40)
 fontHorizontal = ImageFont.truetype(os.path.join(fontdir,'googlefonts/Roboto-Medium.ttf'), 50)
-font_date = ImageFont.truetype(os.path.join(fontdir,'PixelSplitter-Bold.ttf'),11)
+font_date = ImageFont.truetype(os.path.join(fontdir,'PixelSplitter-Bold.ttf'),14)
 
 def internet(host="8.8.8.8", port=53, timeout=3):
 	"""
@@ -142,7 +142,7 @@ def updateDisplay(config,pricestack,whichcoin):
 			image.paste(tokenimage, (10,20)) 
 			draw = ImageDraw.Draw(image)
 			draw.text((5,200),"1 "+ whichcoin,font =fonthiddenprice ,fill = 0)             
-			draw.text((0,10),str(time.strftime("%a %b %d %Y %I:%m%p")),font =font_date,fill = 0)
+			draw.text((0,10),str(time.strftime("%a %b %d    %I:%m%p")),font =font_date,fill = 0)
 			if config['display']['orientation'] == 180 :
 				image=image.rotate(180, expand=True)
 
@@ -176,7 +176,7 @@ def updateDisplay(config,pricestack,whichcoin):
 			draw.text((110,95),pricechange,font =font_date,fill = 0)
 			# Print price to 5 significant figures
 			draw.text((5,200),"$"+pricenowstring,font =font,fill = 0)
-			draw.text((0,10),str(time.strftime("%a %b %d %Y %I:%m%p")),font =font_date,fill = 0)
+			draw.text((0,10),str(time.strftime("%a %b %d    %I:%m%p")),font =font_date,fill = 0)
 			image.paste(tokenimage, (10,25))
 			image.paste(sparkbitmap,(10,125))
 			if config['display']['orientation'] == 180 :
