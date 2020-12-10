@@ -1,4 +1,5 @@
-# Bitcoin (& other tokens) ePaper Ticker 
+# Bitcoin (with Small Love Potion) ePaper Ticker 
+V1.0
 
 A Python3 ePaper Cryptocurrency price ticker that runs on a Raspberry Pi connected to a [Waveshare 2.7 inch monochrome ePaper display](https://www.waveshare.com/wiki/2.7inch_e-Paper_HAT). The script periodically takes data from CoinGecko and prints a summary to the ePaper.
 
@@ -69,7 +70,7 @@ Here's what the buttons do:
 
 Update frequency can be changed in the config.yaml file (default is 600 seconds).
 
-Fork original CODE by "llvllch/btcticker" and customize your coins!
+Fork original CODE by "snarflakes/btcticker" and customize your coins!
 - Update Coins name by changing one of the existing coins to your desired coin in the config.yaml file. Example and quirk: Small love potion should be written as small-love-potion (no spaces). Make sure you then add an Image to go with the coin.  Click Image directory, Click Currency directory, and add file there which should be named nameofyourcoin.bmp.
 
 OR
